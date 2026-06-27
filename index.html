@@ -188,9 +188,125 @@
     .reveal{opacity:1;transform:none;transition:none;}
     html{scroll-behavior:auto;}
   }
+
+  /* ── Überraschungs-Overlay (Geburtstag) ─────────────────────── */
+  .os-overlay{
+    position:fixed;inset:0;z-index:9999;display:none;
+    align-items:center;justify-content:center;
+    padding:24px;overflow-y:auto;
+    background:radial-gradient(130% 120% at 50% 0%, var(--blush) 0%, var(--cream) 52%, var(--cream-2) 100%);
+    -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  }
+  .os-overlay.is-open{display:flex;}
+  body.os-locked{overflow:hidden;}
+  .os-card{
+    position:relative;z-index:2;width:min(560px,100%);
+    background:var(--cream);border:1px solid var(--line);
+    border-radius:24px;box-shadow:var(--shadow);
+    padding:46px 40px;text-align:center;
+  }
+  .os-step{display:none;}
+  .os-step.is-active{display:block;animation:os-in .55s cubic-bezier(.2,.7,.2,1) both;}
+  @keyframes os-in{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+  .os-card .eyebrow{margin-bottom:18px;}
+  .os-card h2{font-size:clamp(1.55rem,4.6vw,2.05rem);margin-bottom:14px;}
+  .os-step > p{color:var(--ink-soft);font-size:1.04rem;}
+  .os-actions{margin-top:30px;}
+  .os-actions .btn{width:100%;justify-content:center;}
+  .os-overlay .btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
+
+  /* Gutschein-Karte */
+  .voucher{
+    position:relative;overflow:hidden;text-align:center;
+    border:1px solid var(--gold-soft);border-radius:var(--arch);
+    background:linear-gradient(178deg,#fff 0%, var(--blush) 100%);
+    padding:34px 30px 30px;
+  }
+  .voucher::before{
+    content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+    width:60px;height:3px;border-radius:0 0 4px 4px;background:var(--gold);
+  }
+  .voucher .eyebrow{margin-bottom:12px;}
+  .voucher h3{font-size:clamp(1.5rem,5vw,1.85rem);margin-bottom:4px;}
+  .v-sub{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.05rem;color:var(--rose);margin-bottom:20px;}
+  .v-rows{border-top:1px solid var(--gold-soft);margin:0 auto 18px;max-width:340px;}
+  .v-row{
+    display:flex;align-items:baseline;justify-content:space-between;gap:14px;
+    padding:11px 2px;border-bottom:1px solid var(--gold-soft);
+    font-size:.95rem;text-align:left;
+  }
+  .v-row span{color:var(--ink-soft);letter-spacing:.04em;}
+  .v-row b{font-weight:600;color:var(--ink);text-align:right;}
+  .v-note{font-size:.88rem;color:var(--ink-soft);}
+  .os-step > .os-closing{margin-top:20px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.06rem;color:var(--ink);}
+
+  /* dezentes Konfetti */
+  .os-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
+  .os-confetti i{
+    position:absolute;top:-14px;display:block;opacity:0;
+    animation:os-fall linear forwards;
+  }
+  @keyframes os-fall{
+    0%{opacity:0;transform:translateY(-14px) rotate(0deg);}
+    12%{opacity:.85;}
+    100%{opacity:0;transform:translateY(102vh) rotate(420deg);}
+  }
+
+  @media (max-width:520px){
+    .os-card{padding:36px 22px;border-radius:18px;}
+    .voucher{padding:28px 18px 26px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .os-step.is-active{animation:none;}
+    .os-confetti{display:none;}
+  }
 </style>
 </head>
 <body>
+
+<!-- Überraschungs-Overlay · nur sichtbar bei #ueberraschung -->
+<div class="os-overlay" id="ueberraschung-overlay" role="dialog" aria-modal="true" aria-labelledby="os-title" hidden>
+  <div class="os-confetti" aria-hidden="true"></div>
+  <div class="os-card">
+
+    <div class="os-step" data-step="1">
+      <span class="eyebrow">Überraschung 1 von 2</span>
+      <h2 id="os-title">Alles Liebe zum Geburtstag ❤️</h2>
+      <p>Ich hab dir dieses Jahr etwas gebaut: deine eigene Homepage. Mama Heilraum ist ab heute online.</p>
+      <div class="os-actions">
+        <button type="button" class="btn btn-primary" data-os-next>Und das ist noch nicht alles →</button>
+      </div>
+    </div>
+
+    <div class="os-step" data-step="2">
+      <span class="eyebrow">Überraschung 2 von 2</span>
+      <h2>Es fehlt nur noch eins – du, in echt.</h2>
+      <p>Gleich, wenn du durch deine Seite scrollst, entdeckst du ein paar graue Foto-Kästchen. Die sind kein Versehen – sie warten auf dich. Mein zweites Geschenk: ein professionelles Branding-Fotoshooting, das deine Seite mit echten Bildern von dir füllt.</p>
+      <div class="os-actions">
+        <button type="button" class="btn btn-primary" data-os-next>Mein Gutschein →</button>
+      </div>
+    </div>
+
+    <div class="os-step" data-step="3">
+      <div class="voucher">
+        <span class="eyebrow">Gutschein</span>
+        <h3>Branding-Fotoshooting</h3>
+        <p class="v-sub">für Mama Heilraum</p>
+        <div class="v-rows">
+          <div class="v-row"><span>Fotografin</span><b>Daniela Rusch (Vorarlberg)</b></div>
+          <div class="v-row"><span>Paket</span><b>Startup Session</b></div>
+          <div class="v-row"><span>Wert</span><b>€ 240</b></div>
+        </div>
+        <p class="v-note">Einlösbar nach Absprache · den Termin wählst du selbst.</p>
+      </div>
+      <p class="os-closing">Damit aus Platzhaltern echte Bilder werden.</p>
+      <div class="os-actions">
+        <button type="button" class="btn btn-primary" data-os-close>Zu meiner Homepage</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <header class="nav">
   <div class="wrap nav-inner">
@@ -455,6 +571,80 @@
   } else {
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
   }
+</script>
+
+<script>
+  /* Geburtstags-Überraschung · Steuerung rein über URL-Hash (#ueberraschung) */
+  (function(){
+    var overlay = document.getElementById('ueberraschung-overlay');
+    if(!overlay) return;
+    var steps = overlay.querySelectorAll('.os-step');
+    var current = 0;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function show(i){
+      current = i;
+      steps.forEach(function(s, idx){ s.classList.toggle('is-active', idx === i); });
+      var btn = steps[i].querySelector('button');
+      if(btn) btn.focus();
+    }
+
+    function open(){
+      if(overlay.classList.contains('is-open')) return;
+      overlay.hidden = false;
+      overlay.classList.add('is-open');
+      document.body.classList.add('os-locked');
+      show(0);
+      if(!reduceMotion) confetti();
+    }
+
+    function close(){
+      overlay.classList.remove('is-open');
+      overlay.hidden = true;
+      document.body.classList.remove('os-locked');
+      if(location.hash === '#ueberraschung'){
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    }
+
+    overlay.addEventListener('click', function(e){
+      var t = e.target.closest('[data-os-next],[data-os-close]');
+      if(!t) return;
+      if(t.hasAttribute('data-os-close')) close();
+      else if(current < steps.length - 1) show(current + 1);
+    });
+
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && overlay.classList.contains('is-open') && current === steps.length - 1){
+        close();
+      }
+    });
+
+    function confetti(){
+      var holder = overlay.querySelector('.os-confetti');
+      if(!holder) return;
+      holder.innerHTML = '';
+      var colors = ['var(--gold)','var(--rose)','var(--blush-deep)','var(--sage)','var(--gold-soft)'];
+      for(var n = 0; n < 26; n++){
+        var p = document.createElement('i');
+        var s = 6 + Math.random() * 6;
+        p.style.left = (Math.random() * 100) + '%';
+        p.style.width = s + 'px';
+        p.style.height = s + 'px';
+        p.style.background = colors[n % colors.length];
+        p.style.borderRadius = Math.random() < 0.5 ? '50%' : '2px';
+        p.style.animationDuration = (3.2 + Math.random() * 2.4) + 's';
+        p.style.animationDelay = (Math.random() * 1.1) + 's';
+        holder.appendChild(p);
+      }
+      setTimeout(function(){ holder.innerHTML = ''; }, 7200);
+    }
+
+    if(location.hash === '#ueberraschung') open();
+    window.addEventListener('hashchange', function(){
+      if(location.hash === '#ueberraschung') open();
+    });
+  })();
 </script>
 </body>
 </html>
